@@ -1,0 +1,27 @@
+.about-page{
+    color: rgb(14, 13, 13);
+
+}
+
+.about-page p{
+    color:rgb(0, 0, 0);
+    font-size: 34px;
+    text-align: center;
+    margin-top: 0;
+
+}
+.section-about{
+    padding: 40px;
+    width: 60%;
+    margin: 60px auto 0;
+    background-color: #D6CCF0;
+    border-radius: 15px;
+}
+.about-list{
+    font-size: 24px;
+    list-style: none;
+}
+.about-list-item{
+    margin: 20px;
+}
+

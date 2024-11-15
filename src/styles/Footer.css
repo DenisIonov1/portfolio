@@ -1,0 +1,23 @@
+.footer{
+    height: auto;
+    padding: 20px 61px 20px;
+    border-top-left-radius: 61px ;
+    border-top-right-radius: 61px;
+    background-color: #866CC5;
+    opacity: .8;
+    margin-top: 60px;
+}
+.list-buttons{
+    width: 150px;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+.list-buttons img{
+    margin: 0;
+    width: 37px;
+    height: 37px;
+}
+.footer p{
+    color: rgb(255, 255, 255);
+}

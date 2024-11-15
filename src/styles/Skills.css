@@ -1,0 +1,37 @@
+.skills-card{
+    margin: 0 auto;
+    margin-top: 60px;
+    padding: 40px;
+    background-color: #D6CCF0;
+    width: 60%;
+    color:black;
+    border-radius: 15px;
+}
+.skills-card p{
+    margin-top: 0;
+    font-size: 34px;
+    text-align: center;
+}
+.list-of-skills{
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 1fr 1fr 1fr;
+    column-gap: 40px;
+    row-gap: 40px;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+
+}
+.skills-card-item{
+    padding: 0;
+    list-style: none;
+    width: 200px;
+    height: 100px;
+    background-color: #aa9bd0;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size:24px;
+}
