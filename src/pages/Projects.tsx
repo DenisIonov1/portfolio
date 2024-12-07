@@ -1,31 +1,47 @@
-import React from 'react';
-import '../styles/Projects.css'
+import React, { useState } from 'react';
+import { projects } from '../data/Projects';
+import '../styles/Projects.css';
+
 const Projects: React.FC = () => {
-    return <div className='projects-page'>
-        <section className='projects-card'>
-            <div className='projects-card-list'><p className='header'>Мои проекты</p>
-                <div className='project-card-item'>
-                    <p>Разработка сайта</p>
-                    <img src="../src/assets/mouth-site-full.jpg" alt="" />
+    const [selectedTech, setSelectedTech] = useState<string>('All');
 
-                </div>
-                <div className='project-card-item'>
-                    <p>Разработка сайта</p>
-                    <img src="../src/assets/sail-club.jpg" alt="" />
+    const filteredProjects = projects.filter((project) =>
+        selectedTech === 'All' ? true : project.technologies.includes(selectedTech)
+    );
 
-                </div>
-                <div className='project-card-item'>
-                    <p>Дизайн сайта</p>
-                    <img src="../src/assets/design-vlru.jpg" alt="" />
+    return (
+        <div className='projects-page'>
+            <section className='projects-card'>
+                <p className='header'>Мои проекты</p>
 
+                <div className='filter'>
+                    <label htmlFor="tech-filter">Выберите технологии: </label>
+                    <select
+                        id="tech-filter"
+                        value={selectedTech}
+                        onChange={(e) => setSelectedTech(e.target.value)}
+                    >
+                        <option value="All">Все</option>
+                        <option value="React">React</option>
+                        <option value="TypeScript">TypeScript</option>
+                        <option value="Node.js">Node.js</option>
+                    </select>
                 </div>
-                <div className='project-card-item'>
-                    <p>Разработка сайта</p>
-                    <img src="../src/assets/social-site.jpg" alt="" />
+                <div className='projects-card-list'>
+
+
+                    {filteredProjects.map((project) => (
+                        <div key={project.id} className='project-card-item'>
+                            <h3>{project.title}</h3>
+                            <p>{project.description}</p>
+                            <p>Технологии: {project.technologies.join(', ')}</p>
+                            <img src={project.image} alt={project.title}/>
+                        </div>
+                    ))}
                 </div>
-            </div>
-        </section>
-    </div>;
+            </section>
+        </div>
+    );
 };
 
 export default Projects;
