@@ -1,0 +1,30 @@
+.home-description{
+    margin-top: 60px;
+    margin-left: 185px;
+    width: 644px;
+    height: 436px;
+    background-color: #D6CCF0;
+    border-radius: 28px;
+    line-height: 33px;
+}
+.home-page-img{
+    margin-top: 60px;
+    width: 407px;
+    height: 436px;
+    border-radius: 64px;
+
+}
+.home-section{
+    display: flex;
+    justify-content: center;
+}
+.home-description h1,
+.home-description p{
+    margin: 60px;
+    font-size: 36px;
+    color: #000;
+
+}
+.home-description h1{
+    font-size: 64px;
+}
