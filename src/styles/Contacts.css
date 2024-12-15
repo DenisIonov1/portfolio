@@ -1,8 +1,7 @@
 .contacts-page {
     display: flex;
     justify-content: center;
-    margin-top: 60px;
-
+    margin-top: 60px
 }
 
 .contacts-form {
@@ -43,5 +42,22 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.error-message {
+    display:inline-block;
+    text-align:center;
+    border: 2px solid red;
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.success-message {
+    text-align: center;
+    color: green;
+    font-weight: bold;
+    margin-top: 20px;
 }
 
