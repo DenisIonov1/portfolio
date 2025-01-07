@@ -34,6 +34,7 @@
 }
 .project-card-item:hover {
     transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .project-card-item img {
@@ -56,4 +57,33 @@
 
 .filter label {
     margin-right: 10px;
+}
+button {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #58c0e6;
+    color: #100f0f;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.filter select {
+    background-color: #58c0e6;
+    color: #000000;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter select:hover {
+    background-color: #3d9b8e;
 }

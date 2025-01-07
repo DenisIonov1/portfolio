@@ -1,25 +1,31 @@
-import React, { useState } from 'react';
-import { projects } from '../data/Projects';
+import React, {useState} from 'react';
+import { observer } from 'mobx-react-lite';
+import { projectStore } from '../store/ProjectStore';
 import '../styles/Projects.css';
+import AddProject from '../components/AddProject';
 
-const Projects: React.FC = () => {
-    const [selectedTech, setSelectedTech] = useState<string>('All');
+const Projects: React.FC = observer(() => {
+    const [isFormVisible, setFormVisible] = useState(false);
+    const { filteredProjects, setSelectedTech } = projectStore;
 
-    const filteredProjects = projects.filter((project) =>
-        selectedTech === 'All' ? true : project.technologies.includes(selectedTech)
-    );
+    const handleTechChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedTech(e.target.value);
+    };
+    const toggleFormVisibility = () => {
+        setFormVisible(!isFormVisible);
+    };
 
     return (
-        <div className='projects-page'>
-            <section className='projects-card'>
-                <p className='header'>Мои проекты</p>
+        <div className="projects-page">
+            <section className="projects-card">
+                <p className="header">Мои проекты</p>
 
-                <div className='filter'>
+                <div className="filter">
                     <label htmlFor="tech-filter">Выберите технологии: </label>
                     <select
                         id="tech-filter"
-                        value={selectedTech}
-                        onChange={(e) => setSelectedTech(e.target.value)}
+                        value={projectStore.selectedTech}
+                        onChange={handleTechChange}
                     >
                         <option value="All">Все</option>
                         <option value="React">React</option>
@@ -27,11 +33,14 @@ const Projects: React.FC = () => {
                         <option value="Node.js">Node.js</option>
                     </select>
                 </div>
-                <div className='projects-card-list'>
+                <button onClick={toggleFormVisibility}>
+                    {isFormVisible ? 'Закрыть' : 'Добавить проект'}
+                </button>
+                {isFormVisible && <AddProject />}
 
-
+                <div className="projects-card-list">
                     {filteredProjects.map((project) => (
-                        <div key={project.id} className='project-card-item'>
+                        <div key={project.id} className="project-card-item">
                             <h3>{project.title}</h3>
                             <p>{project.description}</p>
                             <p>Технологии: {project.technologies.join(', ')}</p>
@@ -42,6 +51,6 @@ const Projects: React.FC = () => {
             </section>
         </div>
     );
-};
+});
 
 export default Projects;
