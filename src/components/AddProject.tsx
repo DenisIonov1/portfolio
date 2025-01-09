@@ -1,37 +1,64 @@
-
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { projectStore } from '../store/ProjectStore';
+import { Technology } from '../store/ProjectStore';
 import { Project } from '../types/Project';
 import '../styles/AddProject.css';
+import { v4 as uuidv4 } from 'uuid';
 
-const AddProject: React.FC = observer(() => {
-    const [title, setTitle] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
-    const [technologies, setTechnologies] = useState<string>('');
-    const [image, setImage] = useState<string>('');
-    const [error, setError] = useState('');
+export const AddProject: React.FC = observer(() => {
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+        technologies: [],
+        image: '',
+        error: ''
+    });
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!title || !description || !technologies || !image) {
-            setError('Все поля должны быть заполнены!');
+        const { title, description, technologies, image } = formData;
+        if (!title || !description || !technologies.length || !image) {
+            setFormData(prevData => ({
+                ...prevData,
+                error: 'Все поля должны быть заполнены!'
+            }));
             return;
         }
 
         const newProject: Project = {
-            id: Date.now(),
+            id: uuidv4(),
             title,
             description,
-            technologies: technologies.split(',').map((tech) => tech.trim()),
+            technologies,
             image,
         };
 
         projectStore.addProject(newProject);
 
-        setTitle('');
-        setDescription('');
-        setTechnologies('');
-        setImage('');
+        setFormData({
+            title: '',
+            description: '',
+            technologies: [],
+            image: '',
+            error: ''
+        });
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    const handleTechChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedTech = e.target.value as Technology;
+        setFormData(prevData => ({
+            ...prevData,
+            technologies: [...prevData.technologies, selectedTech]
+        }));
     };
 
     return (
@@ -41,43 +68,47 @@ const AddProject: React.FC = observer(() => {
                 <label>Название проекта</label>
                 <input
                     type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
                     required
                 />
 
                 <label>Описание</label>
                 <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
                     required
                 />
 
                 <label>Технологии</label>
-                <input
-                    type="text"
-                    value={technologies}
-                    onChange={(e) => setTechnologies(e.target.value)}
-                    placeholder="Через запятую"
-                    required
-                />
+                <select name="technologies" onChange={handleTechChange}>
+                    <option value={Technology.All}>Все</option>
+                    <option value={Technology.React}>React</option>
+                    <option value={Technology.TypeScript}>TypeScript</option>
+                    <option value={Technology.NodeJS}>Node.js</option>
+                    <option value={Technology.CSS}>CSS</option>
+                    <option value={Technology.HTML}>HTML</option>
+                    <option value={Technology.JavaScript}>JavaScript</option>
+                    <option value={Technology.Figma}>Figma</option>
+                </select>
 
                 <label>Ссылка на изображение</label>
                 <input
                     type="text"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
+                    name="image"
+                    value={formData.image}
+                    onChange={handleChange}
                     required
                 />
 
-                {error && <p className="error-message">{error}</p>}
+                {formData.error && <p className="error-message">{formData.error}</p>}
 
-                <button type="submit" disabled={!title || !description || !technologies || !image}>
+                <button type="submit" disabled={!(formData.title && formData.description && formData.technologies.length && formData.image)}>
                     Добавить проект
                 </button>
             </form>
         </div>
     );
 });
-
-export default AddProject;

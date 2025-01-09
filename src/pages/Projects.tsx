@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
 import { observer } from 'mobx-react-lite';
 import { projectStore } from '../store/ProjectStore';
+import { Technology } from '../store/ProjectStore';
 import '../styles/Projects.css';
-import AddProject from '../components/AddProject';
+import { AddProject } from '../components/AddProject';
 
-const Projects: React.FC = observer(() => {
+export const Projects = observer(() => {
     const [isFormVisible, setFormVisible] = useState(false);
     const { filteredProjects, setSelectedTech } = projectStore;
 
     const handleTechChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedTech(e.target.value);
+        setSelectedTech(e.target.value as Technology);
     };
     const toggleFormVisibility = () => {
         setFormVisible(!isFormVisible);
@@ -27,16 +28,20 @@ const Projects: React.FC = observer(() => {
                         value={projectStore.selectedTech}
                         onChange={handleTechChange}
                     >
-                        <option value="All">Все</option>
-                        <option value="React">React</option>
-                        <option value="TypeScript">TypeScript</option>
-                        <option value="Node.js">Node.js</option>
+                        <option value={Technology.All}>Все</option>
+                        <option value={Technology.React}>React</option>
+                        <option value={Technology.TypeScript}>TypeScript</option>
+                        <option value={Technology.NodeJS}>Node.js</option>
+                        <option value={Technology.CSS}>CSS</option>
+                        <option value={Technology.HTML}>HTML</option>
+                        <option value={Technology.JavaScript}>JavaScript</option>
+                        <option value={Technology.Figma}>Figma</option>
                     </select>
                 </div>
                 <button onClick={toggleFormVisibility}>
                     {isFormVisible ? 'Закрыть' : 'Добавить проект'}
                 </button>
-                {isFormVisible && <AddProject />}
+                {isFormVisible && <AddProject/>}
 
                 <div className="projects-card-list">
                     {filteredProjects.map((project) => (
@@ -53,4 +58,4 @@ const Projects: React.FC = observer(() => {
     );
 });
 
-export default Projects;
+
