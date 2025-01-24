@@ -1,5 +1,6 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Project } from '../types/Project';
+import { fetchRepos } from '../services/githubService.ts'
 export enum Technology {
     All = 'All',
     React = 'React',
@@ -12,7 +13,11 @@ export enum Technology {
 }
 class ProjectStore {
     projects: Project[] = [];
+    githubProjects: Project[] = [];
     selectedTech: Technology = Technology.All;
+
+    status: 'idle' | 'loading' | 'succeeded' | 'failed' = 'idle';
+    error: string | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -62,6 +67,26 @@ class ProjectStore {
             ];
         }
     }
+    fetchProjects = async ( username : string, forceRefresh: boolean = false) => {
+        if (!forceRefresh && this.githubProjects.length > 0) {
+            console.log('Проекты уже загружены');
+            return;
+        }
+        this.status = 'loading';
+        this.error = null;
+        try {
+            const fetchedProjects = await fetchRepos(username);
+            runInAction(() => {
+                this.githubProjects = fetchedProjects;
+                this.status = 'succeeded';
+            })
+        } catch (error: unknown) {
+            runInAction(() => {
+                this.status = 'failed';
+                this.error = (error as Error).message;
+            })
+        }
+    }
 
     addProject(project: Project) {
         const projectExists = this.projects.some(existingProject =>
@@ -75,7 +100,6 @@ class ProjectStore {
         this.saveToLocalStorage();
     }
 
-
     setSelectedTech(tech: Technology) {
         this.selectedTech = tech;
     }
@@ -87,7 +111,6 @@ class ProjectStore {
                 project.technologies.includes(this.selectedTech)
             );
     }
-
 
     private saveToLocalStorage() {
         localStorage.setItem('projects', JSON.stringify(this.projects));
