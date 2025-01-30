@@ -4,6 +4,9 @@ import { projectStore } from '../store/ProjectStore';
 import { Technology } from '../store/ProjectStore';
 import '../styles/Projects.css';
 import { AddProject } from '../components/AddProject';
+import { ProjectCard } from '../components/ProjectCard';
+
+const username = 'DenisIonov1';
 
 export const Projects = observer(() => {
     const [isFormVisible, setFormVisible] = useState(false);
@@ -13,24 +16,42 @@ export const Projects = observer(() => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        let isMounted = true;
         const fetchProjects = async () => {
             setLoading(true);
             setError(null);
             try {
-                await projectStore.fetchProjects('DenisIonov1');
+                await projectStore.fetchProjects(username);
+                if (isMounted) {
+                    setLoading(false);
+                }
             } catch (err) {
                 console.error('Ошибка получения проекта:', err);
-                setError('Не удалось загрузить проекты. Попробуйте еще раз.');
+                if (isMounted) {
+                    setError('Не удалось загрузить проекты. Попробуйте еще раз.');
+                }
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
+
             }
         };
 
         fetchProjects();
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const handleTechChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedTech(e.target.value as Technology);
+        const value = e.target.value;
+        if (Object.values(Technology).includes(value as Technology)){
+            setSelectedTech(value as Technology)
+        }
+        else {
+            console.warn(`Недопустимое значение технологии: ${value}`)
+        }
     };
     const toggleFormVisibility = () => {
         setFormVisible(!isFormVisible);
@@ -68,12 +89,7 @@ export const Projects = observer(() => {
 
                 <div className="projects-card-list">
                     {filteredProjects.map((project) => (
-                        <div key={project.id} className="project-card-item">
-                            <h3>{project.title}</h3>
-                            <p>{project.description}</p>
-                            <p>Технологии: {project.technologies.join(', ')}</p>
-                            <img src={project.image} alt={project.title}/>
-                        </div>
+                        <ProjectCard key={project.id} project={project} />
                     ))}
                     {loading && <div className="spinner"></div>}
                     {error && <p className="error-message">{error}</p>}
@@ -81,16 +97,12 @@ export const Projects = observer(() => {
                         <>
                             <h3>Проекты с GitHub</h3>
                             {projectStore.githubProjects.map((project) => (
-                                <div key={project.id} className="project-card-item">
-                                    <h3>{project.title}</h3>
-                                    <p>{project.description || 'Нет описания'}</p>
-                                    <p>Технологии: {project.technologies.join(', ')}</p>
-                                    <p><a href={`https://github.com/DenisIonov1/${project.title}`}
-                                          target="_blank"
-                                          rel="noopener noreferrer">Ссылка на репозиторий</a></p>
-                                    <img src={project.image} alt={project.title}/>
-
-                                </div>
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                    isGitHubProject={true}
+                                    githubLink={`https://github.com/${username}/${project.title}`}
+                                />
                             ))}
                         </>
                     )}
