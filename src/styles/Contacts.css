@@ -60,4 +60,51 @@
     font-weight: bold;
     margin-top: 20px;
 }
-
+body.dark .contacts-form {
+    background-color: #515069;
+    color: #ffffff;
+}
+body.dark button {
+    background-color: #032d33;
+    color: #ffffff;
+}
+@media (max-width: 1024px) {
+    .contacts-form {
+        width: 75%;
+        padding: 40px;
+    }
+    .contacts-form input,
+    .contacts-form textarea,
+    .contacts-form button {
+        width: 90%;
+    }
+}
+@media (max-width: 770px) {
+    .contacts-form {
+        width: 85%;
+        padding: 30px;
+    }
+    .contacts-form h2 {
+        font-size: 18px;
+    }
+    .contacts-form label {
+        font-size: 14px;
+    }
+    .contacts-form input,
+    .contacts-form textarea,
+    .contacts-form button {
+        width: 100%;
+        padding: 8px;
+    }
+}
+@media (max-width: 770px) {
+    .contacts-form {
+        padding: 20px;
+    }
+    .contacts-form h2 {
+        font-size: 16px;
+    }
+    .contacts-form label {
+        font-size: 12px;
+    }
+}
