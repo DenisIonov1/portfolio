@@ -1,6 +1,6 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction} from 'mobx';
 import { Project } from '../types/Project';
-import { fetchRepos } from '../services/githubService.ts'
+import { GitHubService } from '../services/githubService.ts'
 export enum Technology {
     All = 'All',
     React = 'React',
@@ -19,8 +19,11 @@ class ProjectStore {
     status: 'idle' | 'loading' | 'succeeded' | 'failed' = 'idle';
     error: string | null = null;
 
+    private gitHubService: GitHubService;
+
     constructor() {
         makeAutoObservable(this);
+        this.gitHubService = new GitHubService();
         this.loadInitialProjects();
     }
 
@@ -75,7 +78,7 @@ class ProjectStore {
         this.status = 'loading';
         this.error = null;
         try {
-            const fetchedProjects = await fetchRepos(username);
+            const fetchedProjects = await this.gitHubService.fetchRepos(username);
             runInAction(() => {
                 this.githubProjects = fetchedProjects;
                 this.status = 'succeeded';
@@ -83,7 +86,11 @@ class ProjectStore {
         } catch (error: unknown) {
             runInAction(() => {
                 this.status = 'failed';
-                this.error = (error as Error).message;
+                if (error instanceof Error) {
+                    this.error = error.message;
+                }else {
+                    this.error = 'Неизвестная ошибка';
+                }
             })
         }
     }
@@ -101,8 +108,14 @@ class ProjectStore {
     }
 
     setSelectedTech(tech: Technology) {
-        this.selectedTech = tech;
+        if (Object.values(Technology).includes(tech)) {
+            this.selectedTech = tech;
+        }else {
+            console.warn(`Недопустимое значение технологии: ${tech}`);
+            this.selectedTech = Technology.All;
+        }
     }
+
 
     get filteredProjects() {
         return this.selectedTech === Technology.All
@@ -113,7 +126,13 @@ class ProjectStore {
     }
 
     private saveToLocalStorage() {
-        localStorage.setItem('projects', JSON.stringify(this.projects));
+        try {
+            localStorage.setItem('projects', JSON.stringify(this.projects));
+        }catch (error) {
+            console.error('Ошибка при записи в localStorage', error);
+            this.error = 'Ошибка сохранения данных. Попробуйте снова позже.';
+            sessionStorage.setItem('projects', JSON.stringify(this.projects));
+        }
     }
 }
 
