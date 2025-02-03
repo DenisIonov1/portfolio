@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction} from 'mobx';
+import {computed, makeAutoObservable, runInAction} from 'mobx';
 import { Project } from '../types/Project';
 import { GitHubService } from '../services/githubService.ts'
 export enum Technology {
@@ -22,7 +22,8 @@ class ProjectStore {
     private gitHubService: GitHubService;
 
     constructor() {
-        makeAutoObservable(this);
+        makeAutoObservable(this, {
+            filteredProjects: computed });
         this.gitHubService = new GitHubService();
         this.loadInitialProjects();
     }
@@ -31,10 +32,10 @@ class ProjectStore {
         const savedProjects = localStorage.getItem('projects');
         if (savedProjects) {
             try {
-            this.projects = JSON.parse(savedProjects);
-        } catch (error) {
-            console.error('Ошибка', error);
-            this.projects = [];
+                this.projects = JSON.parse(savedProjects);
+            } catch (error) {
+                console.error('Ошибка', error);
+                this.projects = [];
             }
         }
         else {
