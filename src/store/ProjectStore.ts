@@ -1,5 +1,6 @@
-import { makeAutoObservable } from 'mobx';
+import {computed, makeAutoObservable, runInAction} from 'mobx';
 import { Project } from '../types/Project';
+import { GitHubService } from '../services/githubService.ts'
 export enum Technology {
     All = 'All',
     React = 'React',
@@ -12,10 +13,18 @@ export enum Technology {
 }
 class ProjectStore {
     projects: Project[] = [];
+    githubProjects: Project[] = [];
     selectedTech: Technology = Technology.All;
 
+    status: 'idle' | 'loading' | 'succeeded' | 'failed' = 'idle';
+    error: string | null = null;
+
+    private gitHubService: GitHubService;
+
     constructor() {
-        makeAutoObservable(this);
+        makeAutoObservable(this, {
+            filteredProjects: computed });
+        this.gitHubService = new GitHubService();
         this.loadInitialProjects();
     }
 
@@ -23,10 +32,10 @@ class ProjectStore {
         const savedProjects = localStorage.getItem('projects');
         if (savedProjects) {
             try {
-            this.projects = JSON.parse(savedProjects);
-        } catch (error) {
-            console.error('Ошибка', error);
-            this.projects = [];
+                this.projects = JSON.parse(savedProjects);
+            } catch (error) {
+                console.error('Ошибка', error);
+                this.projects = [];
             }
         }
         else {
@@ -62,6 +71,30 @@ class ProjectStore {
             ];
         }
     }
+    fetchProjects = async ( username : string, forceRefresh: boolean = false) => {
+        if (!forceRefresh && this.githubProjects.length > 0) {
+            console.log('Проекты уже загружены');
+            return;
+        }
+        this.status = 'loading';
+        this.error = null;
+        try {
+            const fetchedProjects = await this.gitHubService.fetchRepos(username);
+            runInAction(() => {
+                this.githubProjects = fetchedProjects;
+                this.status = 'succeeded';
+            })
+        } catch (error: unknown) {
+            runInAction(() => {
+                this.status = 'failed';
+                if (error instanceof Error) {
+                    this.error = error.message;
+                }else {
+                    this.error = 'Неизвестная ошибка';
+                }
+            })
+        }
+    }
 
     addProject(project: Project) {
         const projectExists = this.projects.some(existingProject =>
@@ -75,10 +108,15 @@ class ProjectStore {
         this.saveToLocalStorage();
     }
 
-
     setSelectedTech(tech: Technology) {
-        this.selectedTech = tech;
+        if (Object.values(Technology).includes(tech)) {
+            this.selectedTech = tech;
+        }else {
+            console.warn(`Недопустимое значение технологии: ${tech}`);
+            this.selectedTech = Technology.All;
+        }
     }
+
 
     get filteredProjects() {
         return this.selectedTech === Technology.All
@@ -88,9 +126,14 @@ class ProjectStore {
             );
     }
 
-
     private saveToLocalStorage() {
-        localStorage.setItem('projects', JSON.stringify(this.projects));
+        try {
+            localStorage.setItem('projects', JSON.stringify(this.projects));
+        }catch (error) {
+            console.error('Ошибка при записи в localStorage', error);
+            this.error = 'Ошибка сохранения данных. Попробуйте снова позже.';
+            sessionStorage.setItem('projects', JSON.stringify(this.projects));
+        }
     }
 }
 
