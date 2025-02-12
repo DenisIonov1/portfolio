@@ -1,6 +1,5 @@
 .about-page{
     color: rgb(14, 13, 13);
-
 }
 
 .about-page p{
@@ -8,7 +7,6 @@
     font-size: 34px;
     text-align: center;
     margin-top: 0;
-
 }
 .section-about{
     padding: 40px;
@@ -24,4 +22,35 @@
 .about-list-item{
     margin: 20px;
 }
-
+body.dark .section-about {
+    background-color: #515069;
+    color: #ffffff;
+}
+body.dark .section-about p {
+    color: #ffffff;
+}
+@media (max-width: 1024px) {
+    .section-about {
+        width: 80%;
+        padding: 30px;
+    }
+    .about-list, .about-page p {
+        font-size: 24px;
+    }
+}
+@media (max-width: 770px) {
+    .section-about {
+        padding: 20px;
+    }
+    .about-list, .about-page p {
+        font-size: 20px;
+    }
+}
+@media (max-width: 480px) {
+    .section-about {
+        padding: 10px;
+    }
+    .about-list, .about-page p {
+        font-size: 16px;
+    }
+}

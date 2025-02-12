@@ -73,3 +73,78 @@
     font-size: 14px;
     text-align: center;
 }
+body.dark .add-project {
+    background-color: #2f2b3a;
+    color: #ffffff;
+}
+body.dark .add-project-form button{
+    background-color: #032d33;
+    color: #ffffff;
+}
+@media (max-width: 1024px) {
+    .add-project {
+        width: 80%;
+        padding: 30px;
+    }
+    .add-project .header {
+        font-size: 28px;
+    }
+    .add-project-form {
+        gap: 15px;
+    }
+    .add-project-form input,
+    .add-project-form select,
+    .add-project-form textarea {
+        font-size: 14px;
+        padding: 8px;
+    }
+    .add-project-form button {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+@media (max-width: 770px) {
+    .add-project {
+        padding: 25px;
+    }
+    .add-project .header {
+        font-size: 24px;
+    }
+    .add-project-form label {
+        font-size: 14px;
+    }
+    .add-project-form input,
+    .add-project-form select,
+    .add-project-form textarea {
+        font-size: 14px;
+        padding: 6px;
+    }
+    .add-project-form button {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+@media (max-width: 480px) {
+    .add-project {
+        padding: 20px;
+    }
+    .add-project .header {
+        font-size: 20px;
+    }
+    .add-project-form {
+        gap: 10px;
+    }
+    .add-project-form label {
+        font-size: 12px;
+    }
+    .add-project-form input,
+    .add-project-form select,
+    .add-project-form textarea {
+        font-size: 12px;
+        padding: 5px;
+    }
+    .add-project-form button {
+        font-size: 12px;
+        padding: 6px;
+    }
+}

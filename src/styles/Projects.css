@@ -2,7 +2,7 @@
     margin: 60px auto 0;
     padding: 40px;
     background-color: #D6CCF0;
-    width: 60%;
+    width: 70%;
     height: auto;
     color:black;
     border-radius: 15px;
@@ -36,17 +36,19 @@
     transform: scale(1.03);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
 .project-card-item img {
     max-width: 100%;
     max-height: 250px;
 }
-
 .project-card-item p,
 .project-card-item h3
 {
     text-align: center;
     margin-top: 0;
+}
+.projects-card-list h3 {
+    grid-column: span 2;
+    text-align: center;
 }
 .filter {
     display: flex;
@@ -86,4 +88,91 @@ button:hover {
 
 .filter select:hover {
     background-color: #3d9b8e;
+}
+.spinner {
+    margin: 20px auto;
+    border: 4px solid #d1c8f7;
+    border-top: 4px solid #6b58e6;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+body.dark .projects-card {
+    background-color: #515069;
+    color: #ffffff;
+}
+body.dark .project-card-item{
+    background-color: #2f2b3a;
+    color: #ffffff;
+}
+body.dark .projects-card .filter select {
+    background-color: #032d33;
+    color: #ffffff;
+}
+@media (max-width: 1024px) {
+    .projects-card {
+        width: 85%;
+        padding: 30px;
+    }
+    .projects-card-list {
+        gap: 15px;
+    }
+    .project-card-item {
+        width: 100%;
+    }
+}
+@media (max-width: 770px) {
+    .projects-card {
+        padding: 20px;
+    }
+    .projects-card .header {
+        font-size: 28px;
+    }
+    .project-card-item {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+    }
+    .project-card-item h3 {
+        font-size: 14px;
+    }
+    .project-card-item p {
+        font-size: 12px;
+    }
+    .project-card-item img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+    button, .filter select {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+@media (max-width: 480px) {
+    .projects-card {
+        padding: 10px;
+    }
+    .projects-card-list {
+        gap: 10px;
+    }
+    .project-card-item h3 {
+        font-size: 12px;
+    }
+    .project-card-item p {
+        font-size: 10px;
+    }
+    button, .filter select {
+        font-size: 12px;
+        padding: 6px;
+    }
 }

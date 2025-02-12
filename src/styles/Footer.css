@@ -21,3 +21,50 @@
 .footer p{
     color: rgb(255, 255, 255);
 }
+@media (max-width: 1024px) {
+    .footer {
+        padding: 20px 40px;
+    }
+    .list-buttons {
+        width: 120px;
+        justify-content: space-between;
+    }
+    .list-buttons img {
+        width: 32px;
+        height: 32px;
+    }
+}
+@media (max-width: 770px) {
+    .footer {
+        padding: 15px 30px;
+    }
+    .list-buttons {
+        width: 100px;
+        margin: 0 auto;
+    }
+    .list-buttons img {
+        width: 28px;
+        height: 28px;
+    }
+    .footer p {
+        font-size: 14px;
+        text-align: center;
+    }
+}
+@media (max-width: 480px) {
+    .footer {
+        padding: 10px 20px;
+    }
+    .list-buttons {
+        width: 80px;
+        justify-content: center;
+    }
+    .list-buttons img {
+        width: 24px;
+        height: 24px;
+    }
+    .footer p {
+        font-size: 12px;
+        text-align: center;
+    }
+}

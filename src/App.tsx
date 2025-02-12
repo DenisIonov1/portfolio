@@ -1,32 +1,33 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router} from "react-router-dom";
+import {Header} from "./components/Header";
+import {Footer} from "./components/Footer";
+import {ThemeContext, ThemeProvider} from "./context/ThemeContext";
+import React, {useContext, useEffect} from "react";
+import "./styles/App.css";
+import {AnimatedRoutes} from "./components/AnimatedRoutes";
 
-import {Header} from './components/Header.tsx'
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Contacts from './pages/Contacts';
-import Projects from './pages/Projects';
-import Skills from './pages/Skills';
-import { Footer } from "./components/Footer";
-import React from "react";
+export const MainApp: React.FC = ()=> {
+    const {theme} = useContext(ThemeContext);
 
-const App: React.FC = ()=>{
-    return(
-        <div>
-            <Router>
-                <Header />
-                <div>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/contacts" element={<Contacts />} />
-                        <Route path="/projects" element={<Projects />} />
-                        <Route path="/skills" element={<Skills />} />
-                    </Routes>
-                </div>
-                <Footer />
-            </Router>
-        </div>
+    useEffect(() => {
+        document.body.className = theme;
+    }, [theme]);
+
+    return (
+        <>
+            <Header />
+                <AnimatedRoutes />
+            <Footer />
+        </>
     );
 };
 
-export default App;
+export const App: React.FC = () => {
+    return (
+        <ThemeProvider>
+            <Router>
+                <MainApp />
+            </Router>
+        </ThemeProvider>
+    );
+};
